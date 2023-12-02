@@ -5,10 +5,6 @@
 
 using namespace std;
 
-#define MAX_R 12
-#define MAX_G 13
-#define MAX_B 14
-
 bool starts_with(string::iterator begin, string::iterator end, string word)
 {
     for (auto it = word.begin(); it < word.end(); ++it)
@@ -42,17 +38,15 @@ vector<string> split(string::iterator begin, string::iterator end, string separa
 
 int main()
 {
-    int count = 0;
+    int sum = 0;
     string buff = "";
-    int id = 1;
     while (getline(cin, buff))
     {
-        bool possible = true;
+        int r = 0, g = 0, b = 0;
         string a = split(buff.begin(), buff.end(), ":")[1];
         vector<string> sets = split(a.begin(), a.end(), ";");
         for (string s : sets)
         {
-            int r = 0, g = 0, b = 0;
             vector<string> colors = split(s.begin(), s.end(), ",");
             for (string c : colors)
             {
@@ -61,24 +55,18 @@ int main()
                 string colorname;
                 ss >> num;
                 ss >> colorname;
-                if (colorname == "red")
+                if (colorname == "red" && num > r)
                     r = num;
-                else if (colorname == "green")
+                else if (colorname == "green" && num > g)
                     g = num;
-                else if (colorname == "blue")
+                else if (colorname == "blue" && num > b)
                     b = num;
             }
-
-            if (r > MAX_R || g > MAX_G || b > MAX_B)
-            {
-                possible = false;
-                break;
-            }
         }
-        cout << a << " === " << possible << endl;
-        count += possible * id;
-        ++id;
+
+        cout << r * g * b << endl;
+        sum += r * g * b;
     }
-    cout << "Possíveis: " << count << endl;
+    cout << "Sum: " << sum << endl;
     return 0;
 }
