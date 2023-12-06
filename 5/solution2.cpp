@@ -72,16 +72,16 @@ unordered_map<int, string> int2string{
 
 long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
 {
+    cout << "\nRange: begin=" << r.begin << " end=" << r.end << endl;
     maps mapping = map[int2string[next]];
     vector<Range> new_ranges;
 
     // generates new ranges
     for (const auto m : mapping)
     {
-        //cout << "m: " << m.src << " " << m.src + m.range << endl
-        //     << "dest: " << m.dest << endl
-        //     << "r: " << r.begin << " " << r.end << endl;
-        if (r.begin == r.end)
+        cout << "Mapping: src=" << m.src << " dest=" << m.dest << " range=" << m.range << endl;
+        cout << "RangeNOW: begin=" << r.begin << " end=" << r.end << endl;
+        if (r.begin >= r.end)
             break;
 
         Range new_r;
@@ -91,33 +91,39 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
         }
         else if (m.src <= r.begin)
         {
+            cout << "B" << endl;
             new_r.begin = m.dest + (r.begin - m.src);
-            new_r.end = m.dest + (
+            new_r.end = m.dest - m.src + (
                 min(m.src + m.range, r.end)
             );
-            r.begin = new_r.end - m.dest;
+            r.begin = min(m.src + m.range, r.end);
         }
         else if (m.src > r.begin && m.src < r.end)
         {
+            cout << "C" << endl;
             new_r.begin = r.begin;
             new_r.end = m.src;
             r.begin = m.src;
         }
         else
         {
+            cout << "D" << endl;
             new_r.begin = r.begin;
             new_r.end = r.end;
             r.begin = r.end;
         }
 
+        cout << "NRANGE dest begin=" << new_r.begin << " end=" << new_r.end << endl;
+
         new_ranges.push_back(new_r);
     }
-    if (r.begin != r.end)
+    if (r.begin < r.end)
          new_ranges.push_back(r);
 
     if (next == 6)
     {
         sort(new_ranges.begin(), new_ranges.end());
+        cout << "END ===== =========================" << new_ranges[0].begin << "\n";
         return new_ranges[0].begin;
     }
 
@@ -132,6 +138,7 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
     }
 
     sort(res.begin(), res.end());
+    cout << "END ------------------------------------" << res[0] << "\n";
     return res[0];
 }
 
@@ -183,7 +190,7 @@ int main()
         r.begin = stol(seeds[i]);
         r.end = r.begin + stol(seeds[i + 1]);
         long low = lowest_by_range(r, mymap, 0);
-        if (first || low)
+        if (first || low < lowest_location)
             lowest_location = low;
         first = false;
     }
