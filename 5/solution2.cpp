@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -7,11 +8,26 @@
 using namespace std;
 
 struct Mapping {
-    long src = 0;
-    long dest = 0;
-    long range = 0;
+    long src;
+    long dest;
+    long range;
+
+    bool operator<(const Mapping &other) const
+    {
+        return src < other.src;
+    }
 };
 typedef vector<Mapping> maps;
+
+struct Range {
+    long begin; // inclusive
+    long end; // exclusive
+
+    bool operator<(const Range &other) const
+    {
+        return begin < other.begin;
+    }
+};
 
 bool starts_with(string::iterator begin, string::iterator end, string word)
 {
@@ -44,20 +60,82 @@ vector<string> split(string::iterator begin, string::iterator end, string separa
     return v;
 }
 
-long dest(long src, maps mappings)
-{
-    long pos = src;
-    for (auto m : mappings)
-    {
-        if (src < m.src || src > m.src + m.range - 1)
-            continue;
+unordered_map<int, string> int2string{
+    {0, "seed-to-soil"},
+    {1, "soil-to-fertilizer"},
+    {2, "fertilizer-to-water"},
+    {3, "water-to-light"},
+    {4, "light-to-temperature"},
+    {5, "temperature-to-humidity"},
+    {6, "humidity-to-location"},
+};
 
-        pos = m.dest + (src - m.src);
-        break;
+long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
+{
+    maps mapping = map[int2string[next]];
+    vector<Range> new_ranges;
+
+    // generates new ranges
+    for (const auto m : mapping)
+    {
+        //cout << "m: " << m.src << " " << m.src + m.range << endl
+        //     << "dest: " << m.dest << endl
+        //     << "r: " << r.begin << " " << r.end << endl;
+        if (r.begin == r.end)
+            break;
+
+        Range new_r;
+        if (m.src + m.range - 1 < r.begin)
+        {
+            continue;
+        }
+        else if (m.src <= r.begin)
+        {
+            new_r.begin = m.dest + (r.begin - m.src);
+            new_r.end = m.dest + (
+                min(m.src + m.range, r.end)
+            );
+            r.begin = new_r.end - m.dest;
+        }
+        else if (m.src > r.begin && m.src < r.end)
+        {
+            new_r.begin = r.begin;
+            new_r.end = m.src;
+            r.begin = m.src;
+        }
+        else
+        {
+            new_r.begin = r.begin;
+            new_r.end = r.end;
+            r.begin = r.end;
+        }
+
+        new_ranges.push_back(new_r);
+    }
+    if (r.begin != r.end)
+         new_ranges.push_back(r);
+
+    if (next == 6)
+    {
+        sort(new_ranges.begin(), new_ranges.end());
+        return new_ranges[0].begin;
     }
 
-    return pos;
+    vector<long> res;
+    for (auto nr : new_ranges)
+    {
+        if (nr.begin == nr.end)
+            continue;
+        //cout << nr.begin << " " << nr.end << endl;
+        long l = lowest_by_range(nr, map, next + 1);
+        res.push_back(l);
+    }
+
+    sort(res.begin(), res.end());
+    return res[0];
 }
+
+// It thowring a 0 somewhere, find where JOTA i know u can do it
 
 int main()
 {
@@ -94,30 +172,20 @@ int main()
         ss >> m.dest >> m.src >> m.range;
         curr_maps->second.push_back(m);
     }
+    for (auto &it : mymap)
+        sort(it.second.begin(), it.second.end());
 
     long lowest_location = 0;
     bool first = true;
     for (int i = 0; i < seeds.size(); i += 2)
     {
-        cout << i << endl;
-        long seed = stol(seeds[i]);
-        long range = stol(seeds[i+1]);
-        for (int j = 0; j < range; ++j)
-        {
-            ++seed;
-            long soil_pos = dest(seed, mymap["seed-to-soil"]);
-            long fertilizer_pos = dest(soil_pos, mymap["soil-to-fertilizer"]);
-            long water_pos = dest(fertilizer_pos, mymap["fertilizer-to-water"]);
-            long light_pos = dest(water_pos, mymap["water-to-light"]);
-            long temperature_pos = dest(light_pos, mymap["light-to-temperature"]);
-            long humidity_pos = dest(temperature_pos, mymap["temperature-to-humidity"]);
-            long location_pos = dest(humidity_pos, mymap["humidity-to-location"]);
-            if (first || location_pos < lowest_location)
-                lowest_location = location_pos;
-
-            first = false;
-            //cout << "seed: " << seed << " loc: " << location_pos << endl;
-        }
+        Range r;
+        r.begin = stol(seeds[i]);
+        r.end = r.begin + stol(seeds[i + 1]);
+        long low = lowest_by_range(r, mymap, 0);
+        if (first || low)
+            lowest_location = low;
+        first = false;
     }
 
     /*
@@ -125,6 +193,7 @@ int main()
     Try to search by ranges instead of each seed
     Search how the range works going through the process, then find the lowest
     */
+
     cout << lowest_location << endl;
 
     return 0;
