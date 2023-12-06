@@ -95,7 +95,6 @@ int main()
         curr_maps->second.push_back(m);
     }
 
-    unordered_map<long, long> seed_to_dest;
     long lowest_location = 0;
     bool first = true;
     for (int i = 0; i < seeds.size(); i += 2)
@@ -106,15 +105,6 @@ int main()
         for (int j = 0; j < range; ++j)
         {
             ++seed;
-            auto found = seed_to_dest.find(seed);
-            if (found != seed_to_dest.end())
-            {
-                if (first || found->second < lowest_location)
-                    lowest_location = found->second;
-                //cout << "MAP seed: " << found->first << " loc: " << found->second << endl;
-                continue;
-            }
-
             long soil_pos = dest(seed, mymap["seed-to-soil"]);
             long fertilizer_pos = dest(soil_pos, mymap["soil-to-fertilizer"]);
             long water_pos = dest(fertilizer_pos, mymap["fertilizer-to-water"]);
@@ -126,11 +116,15 @@ int main()
                 lowest_location = location_pos;
 
             first = false;
-            seed_to_dest[seed] = location_pos;
             //cout << "seed: " << seed << " loc: " << location_pos << endl;
         }
     }
 
+    /*
+    Possible solution:
+    Try to search by ranges instead of each seed
+    Search how the range works going through the process, then find the lowest
+    */
     cout << lowest_location << endl;
 
     return 0;
