@@ -1,7 +1,7 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 using namespace std;
 
@@ -18,7 +18,8 @@ bool starts_with(string::iterator begin, string::iterator end, string word)
     return true;
 }
 
-vector<string> split(string::iterator begin, string::iterator end, string separator)
+vector<string>
+split(string::iterator begin, string::iterator end, string separator)
 {
     vector<string> v;
     long sep_len = separator.length();

@@ -15,32 +15,20 @@ const int FULLHOUSE = 0b0010000;
 const int FOUR = 0b0100000;
 const int FIVE = 0b1000000;
 
-unordered_map<char, int> card_values = {
-    {'A', 13},
-    {'K', 12},
-    {'Q', 11},
-    {'J', 10},
-    {'T', 9},
-    {'9', 8},
-    {'8', 7},
-    {'7', 6},
-    {'6', 5},
-    {'5', 4},
-    {'4', 3},
-    {'3', 2},
-    {'2', 1}
-};
+unordered_map<char, int> card_values
+    = {{'A', 13}, {'K', 12}, {'Q', 11}, {'J', 10}, {'T', 9}, {'9', 8}, {'8', 7},
+       {'7', 6},  {'6', 5},  {'5', 4},  {'4', 3},  {'3', 2}, {'2', 1}};
 
-struct Hand {
+struct Hand
+{
     string cards;
     int type;
     int bid;
 
     void generate_type();
     bool dedraw(const Hand &other) const;
-    bool operator <(const Hand &other) const;
+    bool operator<(const Hand &other) const;
 };
-
 
 void Hand::generate_type()
 {
@@ -116,7 +104,7 @@ bool Hand::dedraw(const Hand &other) const
     return false;
 }
 
-bool Hand::operator <(const Hand &other) const
+bool Hand::operator<(const Hand &other) const
 {
     return (type < other.type) || (type == other.type && dedraw(other));
 }
@@ -142,9 +130,10 @@ int main()
     int i = 1;
     for (auto h : hands)
     {
-        total += i * h.bid; 
+        total += i * h.bid;
         cout << h.cards << " " << h.type << endl
-             << "RANK: " << i << " - Bid: " << h.bid << " = " << i * h.bid << endl;
+             << "RANK: " << i << " - Bid: " << h.bid << " = " << i * h.bid
+             << endl;
         ++i;
     }
     cout << total << endl;

@@ -6,16 +6,8 @@
 using namespace std;
 
 unordered_map<string, string> mymap{
-    {"one", "1"},
-    {"two", "2"},
-    {"three", "3"},
-    {"four", "4"},
-    {"five", "5"},
-    {"six", "6"},
-    {"seven", "7"},
-    {"eight", "8"},
-    {"nine", "9"}
-};
+    {"one", "1"}, {"two", "2"},   {"three", "3"}, {"four", "4"}, {"five", "5"},
+    {"six", "6"}, {"seven", "7"}, {"eight", "8"}, {"nine", "9"}};
 
 string get_num_by_letters(string::iterator begin, string::iterator end)
 {
@@ -69,8 +61,7 @@ int main()
     while (getline(cin, buff))
     {
         int a = get_value_in_line(buff);
-        cout << buff << endl
-             << a << endl;
+        cout << buff << endl << a << endl;
         sum += a;
     }
     cout << sum << endl;

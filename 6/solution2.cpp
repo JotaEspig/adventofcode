@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -20,7 +20,7 @@ int main()
 
     cout << start << " " << end << endl;
 
-    long product = end - start + 1; 
+    long product = end - start + 1;
 
     cout << product << endl;
     return 0;

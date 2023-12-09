@@ -6,7 +6,8 @@
 
 using namespace std;
 
-struct Mapping {
+struct Mapping
+{
     long src = 0;
     long dest = 0;
     long range = 0;
@@ -22,7 +23,8 @@ bool starts_with(string::iterator begin, string::iterator end, string word)
     return true;
 }
 
-vector<string> split(string::iterator begin, string::iterator end, string separator)
+vector<string>
+split(string::iterator begin, string::iterator end, string separator)
 {
     vector<string> v;
     long sep_len = separator.length();
@@ -82,7 +84,7 @@ int main()
 
         if (is_new)
         {
-            string mappingname = split(buff.begin(), buff.end(), " ")[0]; 
+            string mappingname = split(buff.begin(), buff.end(), " ")[0];
             auto pair = mymap.insert({mappingname, vector<Mapping>{}});
             curr_maps = pair.first;
             is_new = false;
@@ -104,7 +106,8 @@ int main()
         long water_pos = dest(fertilizer_pos, mymap["fertilizer-to-water"]);
         long light_pos = dest(water_pos, mymap["water-to-light"]);
         long temperature_pos = dest(light_pos, mymap["light-to-temperature"]);
-        long humidity_pos = dest(temperature_pos, mymap["temperature-to-humidity"]);
+        long humidity_pos
+            = dest(temperature_pos, mymap["temperature-to-humidity"]);
         long location_pos = dest(humidity_pos, mymap["humidity-to-location"]);
         if (first || location_pos < lowest_location)
             lowest_location = location_pos;

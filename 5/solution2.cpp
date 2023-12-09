@@ -7,7 +7,8 @@
 
 using namespace std;
 
-struct Mapping {
+struct Mapping
+{
     long src;
     long dest;
     long range;
@@ -19,9 +20,10 @@ struct Mapping {
 };
 typedef vector<Mapping> maps;
 
-struct Range {
+struct Range
+{
     long begin; // inclusive
-    long end; // exclusive
+    long end;   // exclusive
 
     bool operator<(const Range &other) const
     {
@@ -38,7 +40,8 @@ bool starts_with(string::iterator begin, string::iterator end, string word)
     return true;
 }
 
-vector<string> split(string::iterator begin, string::iterator end, string separator)
+vector<string>
+split(string::iterator begin, string::iterator end, string separator)
 {
     vector<string> v;
     long sep_len = separator.length();
@@ -61,12 +64,9 @@ vector<string> split(string::iterator begin, string::iterator end, string separa
 }
 
 unordered_map<int, string> int2string{
-    {0, "seed-to-soil"},
-    {1, "soil-to-fertilizer"},
-    {2, "fertilizer-to-water"},
-    {3, "water-to-light"},
-    {4, "light-to-temperature"},
-    {5, "temperature-to-humidity"},
+    {0, "seed-to-soil"},         {1, "soil-to-fertilizer"},
+    {2, "fertilizer-to-water"},  {3, "water-to-light"},
+    {4, "light-to-temperature"}, {5, "temperature-to-humidity"},
     {6, "humidity-to-location"},
 };
 
@@ -79,7 +79,8 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
     // generates new ranges
     for (const auto m : mapping)
     {
-        cout << "Mapping: src=" << m.src << " dest=" << m.dest << " range=" << m.range << endl;
+        cout << "Mapping: src=" << m.src << " dest=" << m.dest
+             << " range=" << m.range << endl;
         cout << "RangeNOW: begin=" << r.begin << " end=" << r.end << endl;
         if (r.begin >= r.end)
             break;
@@ -93,9 +94,7 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
         {
             cout << "B" << endl;
             new_r.begin = m.dest + (r.begin - m.src);
-            new_r.end = m.dest - m.src + (
-                min(m.src + m.range, r.end)
-            );
+            new_r.end = m.dest - m.src + (min(m.src + m.range, r.end));
             r.begin = min(m.src + m.range, r.end);
         }
         else if (m.src > r.begin && m.src < r.end)
@@ -113,17 +112,19 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
             r.begin = r.end;
         }
 
-        cout << "NRANGE dest begin=" << new_r.begin << " end=" << new_r.end << endl;
+        cout << "NRANGE dest begin=" << new_r.begin << " end=" << new_r.end
+             << endl;
 
         new_ranges.push_back(new_r);
     }
     if (r.begin < r.end)
-         new_ranges.push_back(r);
+        new_ranges.push_back(r);
 
     if (next == 6)
     {
         sort(new_ranges.begin(), new_ranges.end());
-        cout << "END ===== =========================" << new_ranges[0].begin << "\n";
+        cout << "END ===== =========================" << new_ranges[0].begin
+             << "\n";
         return new_ranges[0].begin;
     }
 
@@ -132,7 +133,7 @@ long lowest_by_range(Range r, unordered_map<string, maps> map, int next)
     {
         if (nr.begin == nr.end)
             continue;
-        //cout << nr.begin << " " << nr.end << endl;
+        // cout << nr.begin << " " << nr.end << endl;
         long l = lowest_by_range(nr, map, next + 1);
         res.push_back(l);
     }
@@ -167,7 +168,7 @@ int main()
 
         if (is_new)
         {
-            string mappingname = split(buff.begin(), buff.end(), " ")[0]; 
+            string mappingname = split(buff.begin(), buff.end(), " ")[0];
             auto pair = mymap.insert({mappingname, vector<Mapping>{}});
             curr_maps = pair.first;
             is_new = false;

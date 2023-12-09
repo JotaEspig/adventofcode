@@ -1,9 +1,9 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <cctype>
 #include <cmath>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -16,7 +16,8 @@ bool starts_with(string::iterator begin, string::iterator end, string word)
     return true;
 }
 
-vector<string> split(string::iterator begin, string::iterator end, string separator)
+vector<string>
+split(string::iterator begin, string::iterator end, string separator)
 {
     vector<string> v;
     long sep_len = separator.length();
@@ -42,7 +43,7 @@ int main()
 {
     int points = 0;
     string buff;
-    while(getline(cin, buff))
+    while (getline(cin, buff))
     {
         unordered_map<string, int> mymap;
         int exp = -1;
@@ -54,11 +55,11 @@ int main()
             break;
         }
 
-        vector<string> num_list = split(buff.begin() + pos + 1, buff.end(), "|");
+        vector<string> num_list
+            = split(buff.begin() + pos + 1, buff.end(), "|");
 
-        vector<string> winning_nums = split(
-            num_list[0].begin(), num_list[0].end(), " "
-        );
+        vector<string> winning_nums
+            = split(num_list[0].begin(), num_list[0].end(), " ");
         for (auto s : winning_nums)
         {
             if (s.length() == 0 || !isdigit(s[0]))
@@ -67,9 +68,8 @@ int main()
             mymap[s] = 0;
         }
 
-        vector<string> got_nums = split(
-            num_list[1].begin(), num_list[1].end(), " "
-        );
+        vector<string> got_nums
+            = split(num_list[1].begin(), num_list[1].end(), " ");
         for (auto s : got_nums)
         {
             if (s.length() == 0 || !isdigit(s[0]))

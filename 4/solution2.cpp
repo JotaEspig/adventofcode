@@ -1,9 +1,9 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <cctype>
 #include <cmath>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -18,7 +18,8 @@ bool starts_with(string::iterator begin, string::iterator end, string word)
     return true;
 }
 
-vector<string> split(string::iterator begin, string::iterator end, string separator)
+vector<string>
+split(string::iterator begin, string::iterator end, string separator)
 {
     vector<string> v;
     long sep_len = separator.length();
@@ -62,13 +63,11 @@ int points_in_card(vector<string> lines, int idx)
         return 0;
     }
 
-    vector<string> num_list = split(
-        curr_s.begin() + pos + 1, curr_s.end(), "|"
-    );
+    vector<string> num_list
+        = split(curr_s.begin() + pos + 1, curr_s.end(), "|");
 
-    vector<string> winning_nums = split(
-        num_list[0].begin(), num_list[0].end(), " "
-    );
+    vector<string> winning_nums
+        = split(num_list[0].begin(), num_list[0].end(), " ");
     for (auto s : winning_nums)
     {
         if (s.length() == 0 || !isdigit(s[0]))
@@ -77,9 +76,8 @@ int points_in_card(vector<string> lines, int idx)
         mymap[s] = 0;
     }
 
-    vector<string> got_nums = split(
-        num_list[1].begin(), num_list[1].end(), " "
-    );
+    vector<string> got_nums
+        = split(num_list[1].begin(), num_list[1].end(), " ");
     for (auto s : got_nums)
     {
         if (s.length() == 0 || !isdigit(s[0]))
@@ -104,7 +102,7 @@ int main()
     int points = 0;
     string buff;
     vector<string> lines;
-    while(getline(cin, buff))
+    while (getline(cin, buff))
         lines.push_back(buff);
 
     for (int i = 0; i < lines.size(); ++i)

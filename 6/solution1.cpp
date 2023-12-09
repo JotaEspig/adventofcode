@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 #define size 4
@@ -24,7 +24,7 @@ int main()
         if (end == max(x1, x2))
             --end;
         cout << start << " " << end << endl;
-        product *= end - start + 1; 
+        product *= end - start + 1;
     }
 
     cout << product << endl;

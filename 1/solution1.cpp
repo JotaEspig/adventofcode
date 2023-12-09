@@ -36,8 +36,7 @@ int main()
     while (getline(cin, buff))
     {
         int a = get_value_in_line(buff);
-        cout << buff << endl
-             << a << endl;
+        cout << buff << endl << a << endl;
         sum += a;
     }
     cout << sum << endl;
